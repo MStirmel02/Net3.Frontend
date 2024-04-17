@@ -11,6 +11,6 @@ namespace Net3.Frontend.DataObjects.Models
         public string ChannelID { get; set; }
         public string UserID { get; set; }
         public string Content { get; set; }
-        public string TimeSent { get; set; }
+        public DateTime TimeSent { get; set; }
     }
 }
