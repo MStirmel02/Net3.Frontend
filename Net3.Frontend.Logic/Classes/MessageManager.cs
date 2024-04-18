@@ -1,5 +1,6 @@
 ﻿using Net3.Frontend.DataAccess.Classes;
 using Net3.Frontend.DataAccess.Interfaces;
+using Net3.Frontend.DataObjects.Models;
 using Net3.Frontend.Logic.Interfaces;
 using RestSharp;
 using System;
@@ -20,6 +21,30 @@ namespace Net3.Frontend.Logic.Classes
         public MessageManager(IMessageAccess access)
         {
             _access = access;
+        }
+
+        public List<MessageModel> GetChannelMessages(string channelId)
+        {
+            try
+            {
+                return _access.GetChannelMessages(channelId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool SendChannelMessage(MessageModel message)
+        {
+            try
+            {
+                return _access.SendChannelMessage(message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

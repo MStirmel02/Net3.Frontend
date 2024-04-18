@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Net3.Frontend.DataObjects.Models;
 using Net3.Frontend.Models;
 
 namespace Net3.Frontend.Controllers
@@ -68,6 +69,7 @@ namespace Net3.Frontend.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            model.Email += "@chatdb.com";
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -149,26 +151,57 @@ namespace Net3.Frontend.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                Logic.Classes.UserManager userManager = new Logic.Classes.UserManager();
+                if (ModelState.IsValid)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    UserModel userModel = new UserModel()
+                    {
+                        UserId = model.Email,
+                        PasswordHash = Logic.Classes.HelpManager.HashSha256(model.Password)
+                    };
 
-                    return RedirectToAction("Index", "Home");
+                    if (userManager.UserLogin(userModel))
+                    {
+                        ApplicationUser user = new ApplicationUser()
+                        {
+                            Email = model.Email,
+                            PasswordHash = Logic.Classes.HelpManager.HashSha256(model.Password)
+                        };
+                        var result = await UserManager.CreateAsync(user, user.PasswordHash);
+                        if (result.Succeeded)
+                        {
+                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                            return RedirectToAction("Index", "Home");
+                        }
+                        AddErrors(result);
+                    }
+                    else
+                    {
+                        var user = new ApplicationUser
+                        {
+                            UserName = model.Email,
+                            Email = model.Email,
+                        };
+
+                        var dbresult = userManager.UserSignup(userModel);
+                        var result = await UserManager.CreateAsync(user, Logic.Classes.HelpManager.HashSha256(user.PasswordHash));
+                        if (result.Succeeded && dbresult)
+                        {
+                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                            return RedirectToAction("Index", "Home");
+                        }
+                        AddErrors(result);
+                    }
                 }
-                AddErrors(result);
+
+            }
+            catch (Exception)
+            {
+                return View(model);
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 

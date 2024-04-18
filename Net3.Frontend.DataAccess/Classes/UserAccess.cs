@@ -46,11 +46,12 @@ namespace Net3.Frontend.DataAccess.Classes
         public bool UserSignup(UserModel user)
         {
             RestRequest request = new RestRequest(call + "signup");
-            request.AddJsonBody(user);
 
+
+            request.AddBody(user);
             try
             {
-                var response = _client.Get(request).Content;
+                var response = _client.Post(request).Content;
                 ResponseModel<bool> result = JsonConvert.DeserializeObject<ResponseModel<bool>>(response);
                 if (result.Error != null)
                 {

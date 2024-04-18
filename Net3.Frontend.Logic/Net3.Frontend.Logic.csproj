@@ -74,6 +74,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ChannelManager.cs" />
+    <Compile Include="Classes\HelpManager.cs" />
+    <Compile Include="Classes\MessageManager.cs" />
+    <Compile Include="Classes\UserManager.cs" />
     <Compile Include="Interfaces\IChannelManager.cs" />
     <Compile Include="Interfaces\IMessageManager.cs" />
     <Compile Include="Interfaces\IUserManager.cs" />
@@ -84,6 +87,10 @@
     <ProjectReference Include="..\Net3.Frontend.DataAccess\Net3.Frontend.DataAccess.csproj">
       <Project>{0148CDD8-D313-4AA9-AFE9-84447680F81F}</Project>
       <Name>Net3.Frontend.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Net3.Frontend.DataObjects\Net3.Frontend.DataObjects.csproj">
+      <Project>{000BA569-C038-46C8-B5AA-1CD9F67BDF5C}</Project>
+      <Name>Net3.Frontend.DataObjects</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
