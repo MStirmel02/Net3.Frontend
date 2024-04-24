@@ -151,6 +151,8 @@ namespace Net3.Frontend.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            string username = model.Email;
+            model.Email += "@chatDB.com";
             try
             {
                 Logic.Classes.UserManager userManager = new Logic.Classes.UserManager();
@@ -169,7 +171,7 @@ namespace Net3.Frontend.Controllers
                             Email = model.Email,
                             PasswordHash = Logic.Classes.HelpManager.HashSha256(model.Password)
                         };
-                        var result = await UserManager.CreateAsync(user, user.PasswordHash);
+                        var result = await UserManager.CreateAsync(user, model.Password);
                         if (result.Succeeded)
                         {
                             await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -185,13 +187,18 @@ namespace Net3.Frontend.Controllers
                             Email = model.Email,
                         };
 
-                        var dbresult = userManager.UserSignup(userModel);
-                        var result = await UserManager.CreateAsync(user, Logic.Classes.HelpManager.HashSha256(user.PasswordHash));
-                        if (result.Succeeded && dbresult)
+                        bool dbresult = false;
+                        var result = await UserManager.CreateAsync(user, model.Password);
+                        if (result.Succeeded)
                         {
-                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                            return RedirectToAction("Index", "Home");
+                            dbresult = userManager.UserSignup(userModel); 
+                            if (dbresult)
+                            {
+                                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                                return RedirectToAction("Index", "Home");
+                            }
                         }
+
                         AddErrors(result);
                     }
                 }

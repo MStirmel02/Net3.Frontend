@@ -12,6 +12,7 @@ namespace Net3.Frontend.Logic.Interfaces
         bool CreateChannel(ChannelRequestModel requestModel);
         bool JoinChannel(ChannelRequestModel requestModel);
         bool LeaveChannel(ChannelRequestModel requestModel);
+        bool DeleteChannel(ChannelModel requestModel);
         List<ChannelModel> GetUserChannels(string userId);
     }
 }

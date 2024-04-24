@@ -35,6 +35,18 @@ namespace Net3.Frontend.Logic.Classes
             }
         }
 
+        public bool DeleteChannel(ChannelModel requestModel)
+        {
+            try
+            {
+                return _access.DeleteChannel(requestModel);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public List<ChannelModel> GetUserChannels(string userId)
         {
             try

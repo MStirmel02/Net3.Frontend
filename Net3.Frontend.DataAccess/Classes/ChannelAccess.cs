@@ -43,6 +43,27 @@ namespace Net3.Frontend.DataAccess.Classes
             }
         }
 
+        public bool DeleteChannel(ChannelModel requestModel)
+        {
+            RestRequest request = new RestRequest(call + "channels/delete");
+            request.AddJsonBody(requestModel);
+
+            try
+            {
+                var response = _client.Post(request).Content;
+                ResponseModel<bool> result = JsonConvert.DeserializeObject<ResponseModel<bool>>(response);
+                if (result.Error != null)
+                {
+                    throw new Exception(result.Error.Message);
+                }
+                return result.Response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public List<ChannelModel> GetUserChannels(string userId)
         {
             RestRequest request = new RestRequest(call + "channels/" + userId);

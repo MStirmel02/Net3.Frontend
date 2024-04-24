@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "Chatting";
+}
+
+<body class="text-bg-dark">
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+        Channel Management
+    </button>
+
+    <div class="offcanvas offcanvas-start text-bg-dark overflow-auto" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Channel Management</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <hr>
+            <div class="dropdown text-bg-dark">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                    Join Channel
+                </button>
+                <form class="dropdown-menu p-4 text-bg-dark" action="Chat/Join" method="post">
+                    <div class="mb-3">
+                        <label for="joinchannelid" class="form-label">Channel ID</label>
+                        <input class="form-control" id="joinchannelid" name="joinchannelid" placeholder="Channel ID">
+                    </div>
+                    <div class="mb-3">
+                        <label for="joinchannelpassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="joinchannelpassword" name="joinchannelpassword" placeholder="Password">
+                    </div>
+                    <input type="hidden" name="formtype" value="join">
+                    <button type="submit" class="btn btn-primary">Join</button>
+                </form>
+            </div>
+            <div>
+                Or
+            </div>
+            <div class="dropdown text-bg-dark">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                    Create Channel
+                </button>
+                <form class="dropdown-menu p-4 text-bg-dark" action="Chat/Create" method="post">
+                    <div class="mb-3 text-bg-dark">
+                        <label for="createchannelid" class="form-label">Channel ID</label>
+                        <input class="form-control" id="createchannelid" name="createchannelid" placeholder="Channel ID">
+                    </div>
+                    <div class="mb-3">
+                        <label for="createchannelpassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="createchannelpassword" name="createchannelpassword" placeholder="Password">
+                    </div>
+                    <input type="hidden" name="formtype" value="create">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+            <hr>
+            <p>Channels</p>
+            <hr>
+
+            @{
+                foreach (Net3.Frontend.DataObjects.Models.ChannelModel channel in ViewBag.Channels)
+                {
+                    <div class="dropdown mt-3">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                            @channel.ChannelId
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="Chat/View">View Channel</a></li>
+                            @{
+                                if (channel.ChannelRole.Equals("Creator"))
+                                {
+                                    <li>
+                                        <form action="~/Chat/Delete" method="post">
+                                            <button class="text-danger border-0" type="submit" name="channelId" value="@channel.ChannelId">Delete Channel</button>
+                                        </form>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <form action="Chat/Leave" method="post">
+                                            <button class="text-danger border-0" type="submit" name="channelId" value="@channel.ChannelId">Leave Channel</button>
+                                        </form>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                }
+            }
+
+
+            <hr>
+        </div>
+    </div>
+
+
+</body>
