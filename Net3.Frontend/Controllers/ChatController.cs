@@ -51,11 +51,11 @@ namespace Net3.Frontend.Controllers
         }
 
         [HttpPost]
-        public ActionResult View(ChannelRequestModel model)
+        public ActionResult View(string channelId)
         {
             try
             {
-                _messageManager.GetChannelMessages(model.Channel.ChannelId);
+                _messageManager.GetChannelMessages(channelId);
             }
             catch (Exception)
             {
@@ -141,7 +141,7 @@ namespace Net3.Frontend.Controllers
             }
             catch (Exception)
             {
-
+                ViewBag.Channels = new List<ChannelModel>();
             }
         }
     }
