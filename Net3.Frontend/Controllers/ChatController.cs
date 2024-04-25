@@ -8,6 +8,7 @@ using Net3.Frontend.DataObjects.Models;
 using Microsoft.AspNet.Identity;
 using System.Security.Cryptography;
 using System.Data.Entity.Core.Metadata.Edm;
+using Microsoft.AspNet.SignalR;
 
 namespace Net3.Frontend.Controllers
 {
@@ -15,9 +16,10 @@ namespace Net3.Frontend.Controllers
     {
         Logic.Interfaces.IChannelManager _channelManager = new Logic.Classes.ChannelManager();
         Logic.Interfaces.IMessageManager _messageManager = new Logic.Classes.MessageManager();
+        IHubContext<ChatHub> _hubContext;
         public ChatController() 
         {
-
+            
         }
         // GET: Chat
         public ActionResult Index()
@@ -55,11 +57,13 @@ namespace Net3.Frontend.Controllers
         {
             try
             {
-                _messageManager.GetChannelMessages(channelId);
+                //ViewBag.MessageList = _messageManager.GetChannelMessages(channelId);
+
+                _hubContext.Groups.Add
+
             }
             catch (Exception)
             {
-
                 throw;
             }
             return View("Index");

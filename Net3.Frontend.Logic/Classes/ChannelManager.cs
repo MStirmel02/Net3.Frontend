@@ -82,5 +82,6 @@ namespace Net3.Frontend.Logic.Classes
                 throw;
             }
         }
+
     }
 }
