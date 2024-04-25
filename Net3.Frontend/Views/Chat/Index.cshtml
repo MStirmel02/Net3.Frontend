@@ -64,21 +64,25 @@
                             @channel.ChannelId
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="Chat/View">View Channel</a></li>
+                            <li>
+                                <form action="~/Chat/ViewMessages" method="post">
+                                    <button class="dropdown-item btn" type="submit" name="channelId" value="@channel.ChannelId">View Channel</button>
+                                </form>
+                            </li>
                             @{
                                 if (channel.ChannelRole.Equals("Creator"))
                                 {
                                     <li>
                                         <form action="~/Chat/Delete" method="post">
-                                            <button class="text-danger border-0" type="submit" name="channelId" value="@channel.ChannelId">Delete Channel</button>
+                                            <button class="text-danger border-0 btn" type="submit" name="channelId" value="@channel.ChannelId">Delete Channel</button>
                                         </form>
                                     </li>
                                 }
                                 else
                                 {
                                     <li>
-                                        <form action="Chat/Leave" method="post">
-                                            <button class="text-danger border-0" type="submit" name="channelId" value="@channel.ChannelId">Leave Channel</button>
+                                        <form action="~/Chat/Leave" method="post">
+                                            <button class="text-danger border-0 btn" type="submit" name="channelId" value="@channel.ChannelId">Leave Channel</button>
                                         </form>
                                     </li>
                                 }
@@ -95,12 +99,36 @@
 
     </div>
 
+
     <!--Chat-->
     <div class="border border-white border-bottom-0 overflow-auto d-flex justify-content-center" style="height: 75vh">
-        <p>OAWhadwinaiowdnoawndwka</p>
+        <div class="container">
+            @{
+                if (ViewBag.Messages != null)
+                {
+                    foreach (Net3.Frontend.DataObjects.Models.MessageModel message in ViewBag.Messages)
+                    {
+                        <div class="row justify-content-md-start mt-1 mb-1">
+                            <div class="col col-1">
+                                @message.TimeSent.ToString("g")
+                            </div>
+                            <div class="col col-1">
+                                @message.UserID
+                            </div>
+                            <div class="col-md-auto">
+                                @message.Content
+                            </div>
+                        </div>
+                    }
+                }
 
 
-    </div>
+            }
+
+        </div>
+
+
+        </div>
     <!--Text box-->
     <div class="border border-white border-top-0 d-flex justify-content-start">
         <form action="Chat/Send" method="post">

@@ -51,15 +51,16 @@ namespace Net3.Frontend.Controllers
         }
 
         [HttpPost]
-        public ActionResult View(string channelId)
+        public ActionResult ViewMessages(string channelId)
         {
             try
             {
-                _messageManager.GetChannelMessages(channelId);
+                var msgs = _messageManager.GetChannelMessages(channelId);
+                ViewBag.Messages = msgs;
+                GetUserChannels();
             }
             catch (Exception)
             {
-
                 throw;
             }
             return View("Index");
