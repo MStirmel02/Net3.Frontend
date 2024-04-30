@@ -108,11 +108,11 @@
                 {
                     foreach (Net3.Frontend.DataObjects.Models.MessageModel message in ViewBag.Messages)
                     {
-                        <div class="row justify-content-md-start mt-1 mb-1">
+                        <div class="row justify-content-md-start mt-1 mb-1 border-bottom border-white">
                             <div class="col col-1">
                                 @message.TimeSent.ToString("g")
                             </div>
-                            <div class="col col-1">
+                            <div class="col-md-auto">
                                 @message.UserID
                             </div>
                             <div class="col-md-auto">
@@ -131,13 +131,13 @@
         </div>
     <!--Text box-->
     <div class="border border-white border-top-0 d-flex justify-content-start">
-        <form action="Chat/Send" method="post">
-            <input type="text"
+        <form action="~/Chat/SendMessage" method="post">
+            <input type="text" name="message"
                    class="form-control text-bg-dark"
                    placeholder="Write message..." />
 
             <span class="input-group-text send-icon">
-                <button class="border-0 text-bg-primary">Send</button>
+                <button type="submit" class="border-0 text-bg-primary">Send</button>
             </span>
         </form>
     </div>

@@ -8,6 +8,7 @@ using Net3.Frontend.DataObjects.Models;
 using Microsoft.AspNet.Identity;
 using System.Security.Cryptography;
 using System.Data.Entity.Core.Metadata.Edm;
+using Microsoft.Ajax.Utilities;
 
 namespace Net3.Frontend.Controllers
 {
@@ -43,8 +44,7 @@ namespace Net3.Frontend.Controllers
             }
             catch (Exception)
             {
-
-                throw;
+                return View("Index");
             }
 
             return View("Index");
@@ -58,10 +58,11 @@ namespace Net3.Frontend.Controllers
                 var msgs = _messageManager.GetChannelMessages(channelId);
                 ViewBag.Messages = msgs;
                 GetUserChannels();
+                Session["SelectedChannel"] = channelId;
             }
             catch (Exception)
             {
-                throw;
+                return View("Index");
             }
             return View("Index");
         }
@@ -82,8 +83,7 @@ namespace Net3.Frontend.Controllers
             }
             catch (Exception)
             {
-
-                throw;
+                return View("Index");
             }
             return View("Index");
         }
@@ -106,8 +106,7 @@ namespace Net3.Frontend.Controllers
             }
             catch (Exception)
             {
-
-                throw;
+                return View("Index");
             }
             return View("Index");
         }
@@ -127,12 +126,36 @@ namespace Net3.Frontend.Controllers
             }
             catch (Exception)
             {
-
-                throw;
+                return View("Index");
             }
             return View("Index");
         }
 
+        [HttpPost]
+        public ActionResult SendMessage(string message)
+        {
+            if (message.IsNullOrWhiteSpace())
+            {
+                return ViewMessages(channelId);
+            }
+            try
+            {
+                var channelId = Session["SelectedChannel"] as string;
+                MessageModel model = new MessageModel()
+                {
+                    ChannelID = channelId,
+                    Content = message,
+                    UserID = User.Identity.Name
+
+                };
+                _messageManager.SendChannelMessage(model);
+                return ViewMessages(channelId);
+            }
+            catch (Exception)
+            {
+                return View("Index");
+            }
+        }
 
         private void GetUserChannels()
         {
