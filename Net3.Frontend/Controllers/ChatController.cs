@@ -134,13 +134,14 @@ namespace Net3.Frontend.Controllers
         [HttpPost]
         public ActionResult SendMessage(string message)
         {
-            if (message.IsNullOrWhiteSpace())
-            {
-                return ViewMessages(channelId);
-            }
+
             try
             {
                 var channelId = Session["SelectedChannel"] as string;
+                if (message.IsNullOrWhiteSpace())
+                {
+                    return ViewMessages(channelId);
+                }
                 MessageModel model = new MessageModel()
                 {
                     ChannelID = channelId,
