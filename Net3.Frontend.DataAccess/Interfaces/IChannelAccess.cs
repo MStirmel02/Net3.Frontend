@@ -1,4 +1,5 @@
 ﻿using Net3.Frontend.DataObjects.Models;
+using Net3.Services.Channel.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Net3.Frontend.DataAccess.Interfaces
         bool LeaveChannel(ChannelRequestModel requestModel);
         bool DeleteChannel(ChannelModel requestModel);
         List<ChannelModel> GetUserChannels(string userId);
+        List<AdminChannelModel> GetAll();
 
     }
 }

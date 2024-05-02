@@ -12,10 +12,12 @@ using Microsoft.Ajax.Utilities;
 
 namespace Net3.Frontend.Controllers
 {
+    [Authorize]
     public class ChatController : Controller
     {
         Logic.Interfaces.IChannelManager _channelManager = new Logic.Classes.ChannelManager();
         Logic.Interfaces.IMessageManager _messageManager = new Logic.Classes.MessageManager();
+
         public ChatController() 
         {
 
@@ -23,6 +25,7 @@ namespace Net3.Frontend.Controllers
         // GET: Chat
         public ActionResult Index()
         {
+            Session["SelectedChannel"] = "";
             GetUserChannels();
             return View();
         }
@@ -158,11 +161,37 @@ namespace Net3.Frontend.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult Refresh()
+        {
+            try
+            {
+                string channelId = Session["SelectedChannel"] as string;
+                var msgs = _messageManager.GetChannelMessages(channelId);
+                ViewBag.Messages = msgs;
+                GetUserChannels();
+            }
+            catch (Exception)
+            {
+                return View("Index");
+            }
+            return View("Index");
+        }
+
         private void GetUserChannels()
         {
             try
             {
-                ViewBag.Channels = _channelManager.GetUserChannels(User.Identity.Name);
+                List<ChannelModel> channels = _channelManager.GetUserChannels(User.Identity.Name);
+
+                if(channels.Count > 0)
+                {
+                    ViewBag.Channels = channels;
+                }
+                else
+                {
+                    ViewBag.Channels = new List<ChannelModel>();
+                }
             }
             catch (Exception)
             {

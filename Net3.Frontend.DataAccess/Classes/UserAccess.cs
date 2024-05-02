@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Net3.Services.User.UserServices.Models;
 
 namespace Net3.Frontend.DataAccess.Classes
 {
@@ -19,6 +20,26 @@ namespace Net3.Frontend.DataAccess.Classes
         public UserAccess(IRestClient restClient) 
         {
             _client = (RestClient)restClient;
+        }
+
+        public List<AdminUserModel> GetAll()
+        {
+            RestRequest request = new RestRequest(call + "getall");
+
+            try
+            {
+                var response = _client.Get(request).Content;
+                ResponseModel<List<AdminUserModel>> result = JsonConvert.DeserializeObject<ResponseModel<List<AdminUserModel>>>(response);
+                if (result.Error != null)
+                {
+                    throw new Exception(result.Error.Message);
+                }
+                return result.Response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public bool UserLogin(UserModel user)

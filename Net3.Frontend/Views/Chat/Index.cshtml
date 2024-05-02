@@ -19,7 +19,7 @@
                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                     Join Channel
                 </button>
-                <form class="dropdown-menu p-4 text-bg-dark" action="Chat/Join" method="post">
+                <form class="dropdown-menu p-4 text-bg-dark" action="~/Chat/Join" method="post">
                     <div class="mb-3">
                         <label for="joinchannelid" class="form-label">Channel ID</label>
                         <input class="form-control" id="joinchannelid" name="joinchannelid" placeholder="Channel ID">
@@ -39,7 +39,7 @@
                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                     Create Channel
                 </button>
-                <form class="dropdown-menu p-4 text-bg-dark" action="Chat/Create" method="post">
+                <form class="dropdown-menu p-4 text-bg-dark" action="~/Chat/Create" method="post">
                     <div class="mb-3 text-bg-dark">
                         <label for="createchannelid" class="form-label">Channel ID</label>
                         <input class="form-control" id="createchannelid" name="createchannelid" placeholder="Channel ID">
@@ -57,12 +57,27 @@
             <hr>
 
             @{
+
                 foreach (Net3.Frontend.DataObjects.Models.ChannelModel channel in ViewBag.Channels)
                 {
+
+
                     <div class="dropdown mt-3">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                            @channel.ChannelId
-                        </button>
+                        @{
+                            if (Session["SelectedChannel"].ToString() == channel.ChannelId)
+                            {
+                                <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                                    @channel.ChannelId
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                                    @channel.ChannelId
+                                </button>
+                            }
+                        }
+
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li>
                                 <form action="~/Chat/ViewMessages" method="post">
@@ -91,6 +106,7 @@
                     </div>
                 }
             }
+
 
 
             <hr>
@@ -128,7 +144,7 @@
         </div>
 
 
-        </div>
+    </div>
     <!--Text box-->
     <div class="border border-white border-top-0 d-flex justify-content-start">
         <form action="~/Chat/SendMessage" method="post">
@@ -136,9 +152,10 @@
                    class="form-control text-bg-dark"
                    placeholder="Write message..." />
 
-            <span class="input-group-text send-icon">
-                <button type="submit" class="border-0 text-bg-primary">Send</button>
-            </span>
+            <button type="submit" class="border-0 text-bg-primary">Send</button>
+        </form>
+        <form action="~/Chat/Refresh" method="post">
+            <button type="submit" class="border-0 text-bg-primary">Refresh</button>
         </form>
     </div>
 

@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\AdminChannelModel.cs" />
+    <Compile Include="Models\AdminUserModel.cs" />
     <Compile Include="Models\ChannelModel.cs" />
     <Compile Include="Models\ChannelRequestModel.cs" />
     <Compile Include="Models\MessageModel.cs" />

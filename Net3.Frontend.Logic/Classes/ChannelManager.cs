@@ -2,6 +2,7 @@
 using Net3.Frontend.DataAccess.Interfaces;
 using Net3.Frontend.DataObjects.Models;
 using Net3.Frontend.Logic.Interfaces;
+using Net3.Services.Channel.Services.Models;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -76,6 +77,18 @@ namespace Net3.Frontend.Logic.Classes
             try
             {
                 return _access.LeaveChannel(requestModel);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<AdminChannelModel> GetAll()
+        {
+            try
+            {
+                return _access.GetAll();
             }
             catch (Exception)
             {

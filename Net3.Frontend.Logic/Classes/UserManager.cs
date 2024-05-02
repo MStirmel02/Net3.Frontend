@@ -2,6 +2,7 @@
 using Net3.Frontend.DataAccess.Interfaces;
 using Net3.Frontend.DataObjects.Models;
 using Net3.Frontend.Logic.Interfaces;
+using Net3.Services.User.UserServices.Models;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,17 @@ namespace Net3.Frontend.Logic.Classes
             try
             {
                 return _access.UserSignup(user);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public List<AdminUserModel> GetAll()
+        {
+            try
+            {
+                return _access.GetAll();
             }
             catch (Exception)
             {

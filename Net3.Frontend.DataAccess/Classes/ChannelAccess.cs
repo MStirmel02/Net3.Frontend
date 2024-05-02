@@ -1,6 +1,7 @@
 ﻿using Microsoft.SqlServer.Server;
 using Net3.Frontend.DataAccess.Interfaces;
 using Net3.Frontend.DataObjects.Models;
+using Net3.Services.Channel.Services.Models;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -52,6 +53,26 @@ namespace Net3.Frontend.DataAccess.Classes
             {
                 var response = _client.Post(request).Content;
                 ResponseModel<bool> result = JsonConvert.DeserializeObject<ResponseModel<bool>>(response);
+                if (result.Error != null)
+                {
+                    throw new Exception(result.Error.Message);
+                }
+                return result.Response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<AdminChannelModel> GetAll()
+        {
+            RestRequest request = new RestRequest(call + "channels");
+
+            try
+            {
+                var response = _client.Get(request).Content;
+                ResponseModel<List<AdminChannelModel>> result = JsonConvert.DeserializeObject<ResponseModel<List<AdminChannelModel>>>(response);
                 if (result.Error != null)
                 {
                     throw new Exception(result.Error.Message);
